@@ -1,46 +1,52 @@
-# Getting Started with Create React App
+# React + Contentful + Github Pages Boilerplate
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Easily build static pages using this boilerplate - which can be easily deployed in Github Pages!
 
-## Available Scripts
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). Refer to their documentation for further information.
 
-In the project directory, you can run:
+## Setup
 
-### `npm start`
+1. In `package.json`, update the `homepage` and `name` fields with your github username.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```json
+{
+  "homepage": "https://<YOUR_GITHUB_ID>.github.io",
+  "name": "<YOUR_GITHUB_ID>.github.io"
+}
+```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+2. Update the `.env` file with the necessary keys, IDs from your Contentful account.
 
-### `npm test`
+```env
+REACT_APP_CONTENTFUL_BASE_URL=https://cdn.contentful.com
+REACT_APP_CONTENTFUL_SPACE_ID=YOUR_CONTENTFUL_SPACE_ID
+REACT_APP_CONTENTFUL_ENVIRONMENT_ID=YOUR_CONTENTFUL_ENVIRONMENT_ID
+REACT_APP_CONTENTFUL_DELIVERY_TOKEN=-Id6Isa-ZEZm-YOUR_CONTENTFUL_DELIVERY_TOKEN
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Contentful
 
-### `npm run build`
+This uses [contentful.js](https://www.npmjs.com/package/contentful) to access data stored in Contentful via the Content Delivery API.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+To retrieve data, you can directly import `src/adapters/contentful/client` and do requests with the resulting object, eg:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```typescript
+import client from "../client"; // directory depends where you are executing requests from
+const result = await client.getEntries({
+  content_type: "users",
+});
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Deployment
 
-### `npm run eject`
+Once any changes have been merged to the `master` branch, those changes need to be deployed. To do that, simply execute:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```bash
+npm run deploy
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+This builds your app using [gh-pages](https://www.npmjs.com/package/gh-pages). To check the supported options and other information, check their documentation.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+By default, all of the built files will be under the `gh-pages` branch. This will be the branch to be used as a source when configuring your repository to use Github Pages.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+To do that, go to your repository and select _Settings > Pages_. Publish your page using Github pages and select `gh-pages` as the source branch. Leave the directory as `root`.
